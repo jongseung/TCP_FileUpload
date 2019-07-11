@@ -87,7 +87,41 @@ namespace client
 
                 }else if (i == 0) //업로드
                 {
+                    string path = "";
+                    //업로드할 파일의 경로를 사용자 입력 받음
+                    do
+                    {
+                        Console.Write("업로드할 파일을 입력 (확장자명포함): ");
+                        path = Console.ReadLine();
+                        //파일열기
+                        try {
+                            file_stream = File.OpenRead(path);
+                            break;
+                        }
+                        catch //사용자가 입력한 문자열을 통해 파일을 찾을 수 없는 경우
+                        {
+                            Console.WriteLine("존재하지않는 파일입니다.");
+                        }
+                    } while (true);
+                    File_info new_info = new File_info();
+                    //문자열.Split() : 매개변수로 들어간 문자열 단위로 분리시키는 정적함수
+                    //파일경로에서 \\마지막 부분에 파일 이름, 확자자명, 문자열이 있으므로Split함수에서 반환되는 문자열의 마지막 인덱스 값을 파일 
+                    string[] splitstr = file_stream.Name.Split('\\');
+                    string filename = splitstr[splitstr.Length - 1];
 
+                    new_info.filename = filename;
+                    new_info.filesize = file_stream.Length;
+                    //사용자입력을 송신
+                    formatter.Serialize(net_stream, i);
+                    //File_info 객체 송신
+                    formatter.Serialize(net_stream, new_info);
+                    //업로드할 파일데이터 송신
+                    for(i = 0; i < new_info.filesize / 1024f; i++)
+                    {
+                        data_size = file_stream.Read(datas, 0, datas.Length);
+                        net_stream.Write(datas, 0, data_size);
+                    }
+                    file_stream.Close();
                 }
                 else //연결종료
                 {

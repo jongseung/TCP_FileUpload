@@ -129,30 +129,7 @@ namespace server
                 net_stream.Close();
                 client.Close();
             }
-
-            /*
-            TcpClient client = listener.AcceptTcpClient();
-            NetworkStream stream = client.GetStream();
-
-            //파일데이터를 저장할 파일스트림 객체 생성
-            FileStream file_Stream = File.Create("./download.txt");
-            //수신받은 데이터를 파일스트림에 저장
-            byte[] recv_data = new byte[1024];
-            int recv_size = 0;
-            while ((recv_size = stream.Read(recv_data, 0, recv_data.Length)) > 0)
-            {
-                file_Stream.Write(recv_data, 0, recv_size);
-
-            }
-            //파일 닫기
-            file_Stream.Close();
-            //클라이언트 연결 종료
-            stream.Close();
-            client.Close();
-
-            //서버종료
-            listener.Stop();*/
-
+            listener.Stop();
         }
 
 
